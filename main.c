@@ -1,4 +1,4 @@
-// main.c
+// main.c i=i+1  C baby C!!!
 
 #include <stdio.h>
 #include <stdlib.h>
