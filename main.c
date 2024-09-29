@@ -160,7 +160,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
     // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Simple 3D Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Genesis", NULL, NULL);
     if (!window) {
         fprintf(stderr, "Error creating window\n");
         glfwTerminate();
