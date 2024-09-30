@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall   -g -fsanitize=address -std=c11
+CFLAGS = -Wall  -g -fsanitize=address -std=c17
 
 # Include paths
 INCLUDE = -I/opt/homebrew/include
@@ -24,6 +24,11 @@ run: main
 
 main: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LIBPATH) $(LIBS)
+
+mac_deps:
+	@echo "Installing dependencies for macos environment"
+	brew install glew glfw cglm
+
 
 clean:
 	rm -f $(OBJECTS) main

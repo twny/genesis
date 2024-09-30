@@ -1,4 +1,4 @@
-// main.c
+// main.c i=i+1  C baby C!!!
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +41,94 @@ vec3 cameraUp = {0.0f, 1.0f, 0.0f};
 // Projection matrix
 mat4 projection;
 
+// Key mapping for dot movement
+typedef struct {
+    int key;
+    float *axis;
+    float direction;
+} DotKeyMapping;
+
+// Key to function map for camera movement
+typedef struct {
+    int key;
+    void (*action)(float cameraSpeed);
+} CameraKeyMapping;
+
+// Camera movement action functions
+void moveCameraForward(float cameraSpeed);
+void moveCameraBackward(float cameraSpeed);
+void moveCameraLeft(float cameraSpeed);
+void moveCameraRight(float cameraSpeed);
+
+void handleDotMovement(GLFWwindow *window, float moveSpeed, int *movement) {
+    //Easier to add other mappings
+    DotKeyMapping dotMappings[] = {
+        {GLFW_KEY_W, &dotZ, -1.0f},
+        {GLFW_KEY_S, &dotZ,  1.0f},
+        {GLFW_KEY_A, &dotX, -1.0f},
+        {GLFW_KEY_D, &dotX,  1.0f},
+        {GLFW_KEY_Q, &dotY,  1.0f},
+        {GLFW_KEY_E, &dotY, -1.0f},
+    };
+
+    const int numDotMappings = sizeof(dotMappings) / sizeof(dotMappings[0]);
+
+    for (int i = 0; i < numDotMappings; ++i) {
+        if (glfwGetKey(window, dotMappings[i].key) == GLFW_PRESS) {
+            *(dotMappings[i].axis) += dotMappings[i].direction * moveSpeed;
+            *movement = 1;
+        }
+    }
+}
+
+void handleCameraMovement(GLFWwindow *window, float cameraSpeed) {
+    CameraKeyMapping cameraMappings[] = {
+        {GLFW_KEY_UP,    moveCameraForward},
+        {GLFW_KEY_DOWN,  moveCameraBackward},
+        {GLFW_KEY_LEFT,  moveCameraLeft},
+        {GLFW_KEY_RIGHT, moveCameraRight},
+    };
+
+    const int numCameraMappings = sizeof(cameraMappings) / sizeof(cameraMappings[0]);
+
+    for (int i = 0; i < numCameraMappings; ++i) {
+        if (glfwGetKey(window, cameraMappings[i].key) == GLFW_PRESS) {
+            cameraMappings[i].action(cameraSpeed);
+        }
+    }
+}
+
+// Camera movement action implementations
+void moveCameraForward(float cameraSpeed) {
+    cameraPos[0] += cameraFront[0] * cameraSpeed;
+    cameraPos[1] += cameraFront[1] * cameraSpeed;
+    cameraPos[2] += cameraFront[2] * cameraSpeed;
+}
+
+void moveCameraBackward(float cameraSpeed) {
+    cameraPos[0] -= cameraFront[0] * cameraSpeed;
+    cameraPos[1] -= cameraFront[1] * cameraSpeed;
+    cameraPos[2] -= cameraFront[2] * cameraSpeed;
+}
+
+void moveCameraLeft(float cameraSpeed) {
+    vec3 right;
+    glm_cross(cameraFront, cameraUp, right);
+    glm_normalize(right);
+    cameraPos[0] -= right[0] * cameraSpeed;
+    cameraPos[1] -= right[1] * cameraSpeed;
+    cameraPos[2] -= right[2] * cameraSpeed;
+}
+
+void moveCameraRight(float cameraSpeed) {
+    vec3 right;
+    glm_cross(cameraFront, cameraUp, right);
+    glm_normalize(right);
+    cameraPos[0] += right[0] * cameraSpeed;
+    cameraPos[1] += right[1] * cameraSpeed;
+    cameraPos[2] += right[2] * cameraSpeed;
+}
+
 // Callback for window resizing
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     // Adjust the viewport
@@ -53,33 +141,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void processInput(GLFWwindow *window) {
     const float moveSpeed = 0.1f;
+    const float cameraSpeed = 0.1f;
     int movement = 0;
 
-    // Dot movement
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        dotZ -= moveSpeed;
-        movement = 1;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        dotZ += moveSpeed;
-        movement = 1;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        dotX -= moveSpeed;
-        movement = 1;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        dotX += moveSpeed;
-        movement = 1;
-    }
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-        dotY += moveSpeed;
-        movement = 1;
-    }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-        dotY -= moveSpeed;
-        movement = 1;
-    }
+
+    handleDotMovement(window, moveSpeed, &movement);
 
     // Print coordinates when they change
     if (movement) {
@@ -87,33 +153,7 @@ void processInput(GLFWwindow *window) {
     }
 
     // Camera movement
-    const float cameraSpeed = 0.1f;
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        cameraPos[0] += cameraFront[0] * cameraSpeed;
-        cameraPos[1] += cameraFront[1] * cameraSpeed;
-        cameraPos[2] += cameraFront[2] * cameraSpeed;
-    }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        cameraPos[0] -= cameraFront[0] * cameraSpeed;
-        cameraPos[1] -= cameraFront[1] * cameraSpeed;
-        cameraPos[2] -= cameraFront[2] * cameraSpeed;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        vec3 right;
-        glm_cross(cameraFront, cameraUp, right);
-        glm_normalize(right);
-        cameraPos[0] -= right[0] * cameraSpeed;
-        cameraPos[1] -= right[1] * cameraSpeed;
-        cameraPos[2] -= right[2] * cameraSpeed;
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        vec3 right;
-        glm_cross(cameraFront, cameraUp, right);
-        glm_normalize(right);
-        cameraPos[0] += right[0] * cameraSpeed;
-        cameraPos[1] += right[1] * cameraSpeed;
-        cameraPos[2] += right[2] * cameraSpeed;
-    }
+    handleCameraMovement(window, cameraSpeed);
 }
 
 void generateGrid(float size, int divisions, GLfloat** vertices, int* vertexCount) {
