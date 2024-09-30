@@ -4,7 +4,13 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/glew.h>
+#include <GL/gl.h>
+#endif
+
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
