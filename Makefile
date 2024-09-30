@@ -13,5 +13,9 @@ all: main
 main: main.c
 	$(CC) $(CFLAGS) main.c -o main $(INCLUDE) $(LIBPATH) $(LIBS)
 
+mac_deps:
+	@echo "Installing dependencies for macos environment"
+	brew install glew glfw cglm
+
 clean:
 	rm -f main
