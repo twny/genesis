@@ -31,8 +31,7 @@ mac_deps:
 
 linux_deps:
 	@echo "Installing dependencies for Linux environment"
-	@echo "Please run the following command with sudo:"
-	@echo "sudo apt-get install libglfw3-dev libglew-dev libcglm-dev"
+	sudo apt-get install libglfw3-dev libglew-dev libcglm-dev
 
 deps: $(INSTALL_DEPS)
 
