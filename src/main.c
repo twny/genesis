@@ -141,12 +141,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void processInput(GLFWwindow *window) {
     const float moveSpeed = 0.1f;
-    const float cameraSpeed = 0.1f;    
+    const float cameraSpeed = 0.1f;
     int movement = 0;
 
 
     handleDotMovement(window, moveSpeed, &movement);
-    
+
     // Print coordinates when they change
     if (movement) {
         printf("Dot Position: X=%.2f, Y=%.2f, Z=%.2f\n", dotX, dotY, dotZ);
@@ -400,7 +400,7 @@ int main() {
     glPointSize(10.0f);
 
     // Main loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         // Process input
         processInput(window);
 
