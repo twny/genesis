@@ -1,5 +1,6 @@
 buildHtml
 permalink index.html
+viewSourceButton https://github.com/twny/genesis
 theme dark
 
 center
