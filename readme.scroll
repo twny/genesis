@@ -1,16 +1,17 @@
 buildHtml
+permalink index.html
 theme dark
 
+center
 # Genesis
-
-screenshot.png
-
 A game engine in c.
-
+screenshot.png
+ width 400px
 Built in Public on Twitter.
  https://x.com/tawnniee/status/1840521375616016662
 
-Currently MacOS only.
-
+center
 # Roadmap
-Go from OpenGL to Vulcan.
+
+- Go from OpenGL to Vulcan.
+- Support other platforms besides MacOS.
