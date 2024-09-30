@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -std=c11
+CFLAGS = -Wall   -g -fsanitize=address -std=c11
 
 # Include paths
 INCLUDE = -I/opt/homebrew/include
@@ -8,10 +8,27 @@ INCLUDE = -I/opt/homebrew/include
 LIBPATH = -L/opt/homebrew/lib
 LIBS = -lglfw -lGLEW -lcglm -framework OpenGL -framework Cocoa -framework IOKit
 
+# Source directory
+SRCDIR = src
+
+# Find all .c files in the source directory
+SOURCES := $(shell find $(SRCDIR) -name '*.c')
+OBJECTS := $(SOURCES:.c=.o)
+
 all: main
 
-main: main.c
-	$(CC) $(CFLAGS) main.c -o main $(INCLUDE) $(LIBPATH) $(LIBS)
+run: main
+	./main
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+
+main: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LIBPATH) $(LIBS)
 
 clean:
+	rm -f $(OBJECTS) main
+
+fclean: clean
 	rm -f main
+
+re: fclean all

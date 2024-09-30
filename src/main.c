@@ -360,7 +360,7 @@ int main() {
     glPointSize(10.0f);
 
     // Main loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
         // Process input
         processInput(window);
 
