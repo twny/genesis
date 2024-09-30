@@ -17,9 +17,5 @@ mac_deps:
 	@echo "Installing dependencies for macos environment"
 	brew install glew glfw cglm
 
-mac_deps:
-	@echo "Installing dependencies for macos environment"
-	brew install glew glfw cglm
-
 clean:
 	rm -f main

@@ -1,0 +1,22 @@
+buildHtml
+permalink index.html
+viewSourceButton https://github.com/twny/genesis
+theme dark
+
+center
+# Genesis
+A game engine in c.
+screenshot.png
+ width 400px
+Built in Public on Twitter.
+ https://x.com/tawnniee/status/1840521375616016662
+
+# Install, build and run in one line:
+ git clone https://github.com/twny/genesis && cd genesis && make mac_deps && make build && ./main.c
+
+# How to use
+Use the WASD keys to move the ball.
+
+center
+# Roadmap
+- Support other platforms besides MacOS.
