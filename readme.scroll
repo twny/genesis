@@ -1,3 +1,6 @@
+buildHtml
+theme dark
+
 # Genesis
 
 A game engine in c.
